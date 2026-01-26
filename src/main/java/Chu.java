@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Chu {
     public static void main(String[] args) {
         String logo =
@@ -9,6 +11,13 @@ public class Chu {
                         + " \\_____|_|  |_|\\___/ \n";
         System.out.println("Hello I'm\n" + logo);
         System.out.println("What can I do for you?");
+        String line;
+        Scanner in = new Scanner(System.in);
+        line = in.nextLine();
+        while(!(line.equalsIgnoreCase("bye"))){
+            System.out.println(line);
+            line = in.nextLine();
+        }
         System.out.println("Bye. Hope to see you again soon!");
     }
 }
