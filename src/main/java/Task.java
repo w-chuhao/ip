@@ -12,14 +12,23 @@ public class Task {
     }
 
     public void unmark() {
+
         this.isDone = false;
     }
 
     public String getStatusIcon() {
+
         return isDone ? "X" : " ";
     }
 
     public String getDescription() {
+
         return description;
     }
+
+    @Override
+    public String toString() {
+        return "[" + getStatusIcon() + "] " + description;
+    }
+
 }
