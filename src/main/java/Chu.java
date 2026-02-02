@@ -1,5 +1,4 @@
 import java.util.Scanner;
-import java.util.Arrays;
 
 public class Chu {
     public static void main(String[] args) {
@@ -14,7 +13,7 @@ public class Chu {
         System.out.println("What can I do for you?");
 
         Scanner in = new Scanner(System.in);
-        Task[] task = new Task[100];
+        Tasks[] task = new Tasks[100];
 
         int counter = 0;
         int index = 0;
@@ -54,7 +53,7 @@ public class Chu {
                 break;
 
             case "todo":
-                task[counter] = new Todo(line.substring(5));
+                task[counter] = new ToDos(line.substring(5));
                 System.out.println("Got it. I've added this task:");
                 System.out.println(task[counter]);
                 counter+=1;
@@ -87,7 +86,7 @@ public class Chu {
 
             default:
                 System.out.println("added: " + line);
-                task[counter] = new Task(line);
+                task[counter] = new Tasks(line);
                 counter += 1;
                 break;
             }
