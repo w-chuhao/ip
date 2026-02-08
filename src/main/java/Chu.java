@@ -19,76 +19,74 @@ public class Chu {
         int index = 0;
 
         while (true) {
-            String line = in.nextLine().trim().toLowerCase();
+            try {
+                String line = in.nextLine();
+                ErrorHandler.handleEmpty(line);
+                line = line.trim().toLowerCase();
 
-            String[] sentence = line.split(" ");
+                String[] sentence = line.split(" ");
+                String command = sentence[0];
 
-            switch (sentence[0]) {
-            case "bye":
-                System.out.println("Bye. Hope to see you again soon!");
-                return;
+                switch (command) {
+                case "bye":
+                    System.out.println("Bye. Hope to see you again soon!");
+                    return;
 
-            case "list":
-                System.out.println("Here are the tasks in your list:");
-                for (int i = 0; i < counter; i++) {
-                    System.out.println((i + 1) + "." + task[i]);
+                case "list":
+                    System.out.println("Here are the tasks in your list:");
+                    for (int i = 0; i < counter; i++) {
+                        System.out.println((i + 1) + "." + task[i]);
+                    }
+                    break;
+                case "mark":
+                    index = ErrorHandler.handleIndex(sentence, counter);
+                    task[index].markAsDone();
+                    System.out.println("Nice! I've marked this task as done:");
+                    System.out.println(task[index]);
+                    break;
+
+                case "unmark":
+                    index = ErrorHandler.handleIndex(sentence, counter);
+                    task[index].unmark();
+                    System.out.println("OK, I've marked this task as not done yet:");
+                    System.out.println(task[index]);
+                    break;
+
+                case "todo":
+                    String toDo = ErrorHandler.handleToDos(line);
+                    task[counter] = new ToDos(toDo);
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println(task[counter]);
+                    counter += 1;
+                    System.out.println("Now you have " + counter + " tasks in the list.");
+                    break;
+
+                case "deadline":
+                    String[] deadline = ErrorHandler.handleDeadlines(line);
+                    task[counter] = new Deadlines(deadline[0], deadline[1]);
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println(task[counter]);
+                    counter += 1;
+                    System.out.println("Now you have " + counter + " tasks in the list.");
+                    break;
+
+                case "event":
+                    String[] event = ErrorHandler.handleEvents(line);
+                    task[counter] = new Events(event[0], event[1], event[2]);
+                    System.out.println("Got it. I've added this task:");
+                    System.out.println(task[counter]);
+                    counter += 1;
+                    System.out.println("Now you have " + counter + " tasks in the list.");
+                    break;
+
+                default:
+                    throw new ChuExceptions("Invalid command. Valid commands: bye, list, todo, deadline, event, mark, unmark.");
                 }
-                break;
-            case "mark":
-                if(sentence[1] != null){
-                    index = Integer.parseInt(sentence[1])-1;
-                }
-                task[index].markAsDone();
-                System.out.println("Nice! I've marked this task as done:");
-                System.out.println(task[index]);
-                break;
 
-            case "unmark":
-                if(sentence[1] != null){
-                    index = Integer.parseInt(sentence[1])-1;
-                }
-                task[index].unmark();
-                System.out.println("OK, I've marked this task as not done yet:");
-                System.out.println(task[index]);
-                break;
-
-            case "todo":
-                task[counter] = new ToDos(line.substring(5));
-                System.out.println("Got it. I've added this task:");
-                System.out.println(task[counter]);
-                counter+=1;
-                System.out.println("Now you have " + counter + " tasks in the list.");
-                break;
-
-            case "deadline":
-                int byIndex = line.indexOf("/by");
-                String description_deadline = line.substring(9, byIndex).trim();
-                String by = line.substring(byIndex + 3).trim();
-                task[counter] = new Deadlines(description_deadline,by);
-                System.out.println("Got it. I've added this task:");
-                System.out.println(task[counter]);
-                counter+=1;
-                System.out.println("Now you have " + counter + " tasks in the list.");
-                break;
-
-            case "event":
-                int fromIndex = line.indexOf("/from");
-                int toIndex = line.indexOf("/to");
-                String description_event = line.substring(6, fromIndex).trim();
-                String from  = line.substring(fromIndex + 5,toIndex).trim();
-                String to  = line.substring(toIndex + 3).trim();
-                task[counter] = new Events(description_event,from,to);
-                System.out.println("Got it. I've added this task:");
-                System.out.println(task[counter]);
-                counter+=1;
-                System.out.println("Now you have " + counter + " tasks in the list.");
-                break;
-
-            default:
-                System.out.println("added: " + line);
-                task[counter] = new Tasks(line);
-                counter += 1;
-                break;
+            } catch (ChuExceptions e) {
+                System.out.println(e.getMessage());
+            } catch (Exception e) {
+                System.out.println("Something went wrong. Try again.");
             }
         }
     }
