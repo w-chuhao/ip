@@ -1,3 +1,12 @@
+package chu.ui;
+
+import chu.errorHandler.ChuExceptions;
+import chu.errorHandler.ErrorHandler;
+import chu.tasks.Deadlines;
+import chu.tasks.Events;
+import chu.tasks.Tasks;
+import chu.tasks.ToDos;
+
 import java.util.Scanner;
 
 public class Chu {

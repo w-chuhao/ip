@@ -1,3 +1,5 @@
+package chu.errorHandler;
+
 public class ErrorHandler {
 
     public static void handleEmpty(String line) throws ChuExceptions {
@@ -8,7 +10,7 @@ public class ErrorHandler {
 
     public static int handleIndex(String[] sentence, int counter) throws ChuExceptions {
         if (sentence.length < 2) {
-            throw new ChuExceptions("Please provide an index, e.g. `mark 2`.");
+            throw new ChuExceptions("Please provide an index, e.g. `mark 2`, `unmark 2`.");
         }
         int index;
         try {
