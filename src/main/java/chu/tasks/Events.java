@@ -1,3 +1,5 @@
+package chu.tasks;
+
 public class Events extends Tasks {
     protected String start;
     protected String end;

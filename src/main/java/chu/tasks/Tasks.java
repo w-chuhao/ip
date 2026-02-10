@@ -1,3 +1,5 @@
+package chu.tasks;
+
 public class Tasks {
     protected String description;
     protected boolean isDone;
