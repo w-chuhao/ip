@@ -5,47 +5,54 @@ import chu.tasks.Events;
 import chu.tasks.Tasks;
 import chu.tasks.ToDos;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TaskStorage {
-    private static final String DATA_FILE_PATH = "data/chu.txt";
+    private static final Path DATA_FILE_PATH = Paths.get("data", "chu.txt");
 
-    public void initStorage() throws IOException {
-        File dataFile = new File(DATA_FILE_PATH);
-        File parentDirectory = dataFile.getParentFile();
-        if (parentDirectory != null && !parentDirectory.exists()) {
-            parentDirectory.mkdirs();
-        }
-        if (!dataFile.exists()) {
-            dataFile.createNewFile();
+    public void initStorage() {
+        try {
+            Path parentDirectory = DATA_FILE_PATH.getParent();
+            if (parentDirectory != null) {
+                Files.createDirectories(parentDirectory);
+            }
+            if (!Files.exists(DATA_FILE_PATH)) {
+                Files.createFile(DATA_FILE_PATH);
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to initialize storage file.");
         }
     }
 
-    public ArrayList<Tasks> loadTasks() throws IOException {
+    public ArrayList<Tasks> loadTasks() {
         ArrayList<Tasks> task = new ArrayList<>();
-
-        File dataFile = new File(DATA_FILE_PATH);
-        Scanner scanner = new Scanner(dataFile);
-        while (scanner.hasNext()) {
-            String line = scanner.nextLine();
-            if (!line.isEmpty()) {
-                task.add(parseLine(line));
+        try (Scanner scanner = new Scanner(DATA_FILE_PATH.toFile())) {
+            while (scanner.hasNext()) {
+                String line = scanner.nextLine();
+                if (!line.isEmpty()) {
+                    task.add(parseLine(line));
+                }
             }
+        } catch (IOException e) {
+            System.out.println("Unable to load tasks from storage.");
         }
-        scanner.close();
         return task;
     }
 
-    public void saveTasks(ArrayList<Tasks> task) throws IOException {
-        FileWriter fileWriter = new FileWriter(DATA_FILE_PATH);
-        for (Tasks currentTask : task) {
-            fileWriter.write(formatTask(currentTask) + System.lineSeparator());
+    public void saveTasks(ArrayList<Tasks> task) {
+        try (FileWriter fileWriter = new FileWriter(DATA_FILE_PATH.toFile())) {
+            for (Tasks currentTask : task) {
+                fileWriter.write(formatTask(currentTask) + System.lineSeparator());
+            }
+        } catch (IOException e) {
+            System.out.println("Unable to save tasks to storage.");
         }
-        fileWriter.close();
     }
 
     private Tasks parseLine(String line) {
