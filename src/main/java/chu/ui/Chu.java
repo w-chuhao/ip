@@ -23,7 +23,7 @@ public class Chu {
         System.out.println("What can I do for you?");
 
         Scanner in = new Scanner(System.in);
-        ArrayList<Tasks> task = new ArrayList<>();
+        ArrayList<Tasks> tasks = new ArrayList<>();
         int index = 0;
 
         while (true) {
@@ -42,47 +42,57 @@ public class Chu {
 
                 case "list":
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < task.size(); i++) {
-                        System.out.println((i + 1) + "." + task.get(i));
+                    for (int i = 0; i < tasks.size(); i++) {
+                        System.out.println((i + 1) + "." + tasks.get(i));
                     }
                     break;
+
+                case "delete":
+                    index = ErrorHandler.handleIndex(sentence, tasks.size());
+                    System.out.println("Noted, I've removed this task:");
+                    System.out.println(tasks.get(index));
+                    tasks.remove(index);
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    break;
+
                 case "mark":
-                    index = ErrorHandler.handleIndex(sentence, task.size());
-                    task.get(index).markAsDone();
-                    System.out.println("Nice! I've marked this task as done:");
-                    System.out.println(task.get(index));
+                    index = ErrorHandler.handleIndex(sentence, tasks.size());
+                    tasks.get(index).markAsDone();
+                    System.out.println("Nice! I've marked this tasks as done:");
+                    System.out.println(tasks.get(index));
                     break;
 
                 case "unmark":
-                    index = ErrorHandler.handleIndex(sentence, task.size());
-                    task.get(index).unmark();
-                    System.out.println("OK, I've marked this task as not done yet:");
-                    System.out.println(task.get(index));
+                    index = ErrorHandler.handleIndex(sentence, tasks.size());
+                    tasks.get(index).unmark();
+                    System.out.println("OK, I've marked this tasks as not done yet:");
+                    System.out.println(tasks.get(index));
                     break;
 
                 case "todo":
                     String toDo = ErrorHandler.handleToDos(line);
-                    task.add(new ToDos(toDo));
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(task.get(task.size() - 1));
-                    System.out.println("Now you have " + task.size() + " tasks in the list.");
+                    tasks.add(new ToDos(toDo));
+                    System.out.println("Got it. I've added this tasks:");
+                    System.out.println(tasks.get(tasks.size() - 1));
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     break;
 
                 case "deadline":
                     String[] deadline = ErrorHandler.handleDeadlines(line);
-                    task.add(new Deadlines(deadline[0], deadline[1]));
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(task.get(task.size() - 1));
-                    System.out.println("Now you have " + task.size() + " tasks in the list.");
+                    tasks.add(new Deadlines(deadline[0], deadline[1]));
+                    System.out.println("Got it. I've added this tasks:");
+                    System.out.println(tasks.get(tasks.size() - 1));
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     break;
 
                 case "event":
                     String[] event = ErrorHandler.handleEvents(line);
-                    task.add(new Events(event[0], event[1], event[2]));
-                    System.out.println("Got it. I've added this task:");
-                    System.out.println(task.get(task.size() - 1));
-                    System.out.println("Now you have " + task.size() + " tasks in the list.");
+                    tasks.add(new Events(event[0], event[1], event[2]));
+                    System.out.println("Got it. I've added this tasks:");
+                    System.out.println(tasks.get(tasks.size() - 1));
+                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     break;
+
 
                 default:
                     throw new ChuExceptions("Invalid command. Valid commands: bye, list, todo, deadline, event, mark, unmark.");
