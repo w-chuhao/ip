@@ -3,5 +3,4 @@ D | 1 | read book | 5pm
 E | 0 | go to school | 5pm | 7pm
 T | 0 | eat dinner
 T | 0 | read book
-D | 0 | asdfasdf | 5pm
 E | 0 | do blah blah | 5pm | 6pm

@@ -62,6 +62,7 @@ public class Chu {
                     System.out.println("Noted, I've removed this tasks:");
                     System.out.println(tasks.get(index));
                     tasks.remove(index);
+                    storage.saveTasks(tasks);
                     System.out.println("Now you have " + tasks.size() + " tasks in the list.");
                     break;
 
