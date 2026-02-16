@@ -2,6 +2,7 @@ package chu.ui;
 
 import chu.errorHandler.ChuExceptions;
 import chu.errorHandler.ErrorHandler;
+import chu.storage.TaskStorage;
 import chu.tasks.Deadlines;
 import chu.tasks.Events;
 import chu.tasks.Tasks;
@@ -23,7 +24,14 @@ public class Chu {
         System.out.println("What can I do for you?");
 
         Scanner in = new Scanner(System.in);
+        TaskStorage storage = new TaskStorage();
         ArrayList<Tasks> task = new ArrayList<>();
+        try {
+            storage.initStorage();
+            task = storage.loadTasks();
+        } catch (Exception e) {
+            System.out.println("Unable to initialize storage.");
+        }
         int index = 0;
 
         while (true) {
@@ -49,6 +57,7 @@ public class Chu {
                 case "mark":
                     index = ErrorHandler.handleIndex(sentence, task.size());
                     task.get(index).markAsDone();
+                    storage.saveTasks(task);
                     System.out.println("Nice! I've marked this task as done:");
                     System.out.println(task.get(index));
                     break;
@@ -56,6 +65,7 @@ public class Chu {
                 case "unmark":
                     index = ErrorHandler.handleIndex(sentence, task.size());
                     task.get(index).unmark();
+                    storage.saveTasks(task);
                     System.out.println("OK, I've marked this task as not done yet:");
                     System.out.println(task.get(index));
                     break;
@@ -63,6 +73,7 @@ public class Chu {
                 case "todo":
                     String toDo = ErrorHandler.handleToDos(line);
                     task.add(new ToDos(toDo));
+                    storage.saveTasks(task);
                     System.out.println("Got it. I've added this task:");
                     System.out.println(task.get(task.size() - 1));
                     System.out.println("Now you have " + task.size() + " tasks in the list.");
@@ -71,6 +82,7 @@ public class Chu {
                 case "deadline":
                     String[] deadline = ErrorHandler.handleDeadlines(line);
                     task.add(new Deadlines(deadline[0], deadline[1]));
+                    storage.saveTasks(task);
                     System.out.println("Got it. I've added this task:");
                     System.out.println(task.get(task.size() - 1));
                     System.out.println("Now you have " + task.size() + " tasks in the list.");
@@ -79,6 +91,7 @@ public class Chu {
                 case "event":
                     String[] event = ErrorHandler.handleEvents(line);
                     task.add(new Events(event[0], event[1], event[2]));
+                    storage.saveTasks(task);
                     System.out.println("Got it. I've added this task:");
                     System.out.println(task.get(task.size() - 1));
                     System.out.println("Now you have " + task.size() + " tasks in the list.");
@@ -96,4 +109,3 @@ public class Chu {
         }
     }
 }
-
