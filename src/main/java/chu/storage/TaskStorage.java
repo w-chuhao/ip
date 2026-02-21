@@ -1,5 +1,6 @@
 package chu.storage;
 
+import chu.tasklist.TaskList;
 import chu.tasks.Deadlines;
 import chu.tasks.Events;
 import chu.tasks.Tasks;
@@ -30,7 +31,7 @@ public class TaskStorage {
         }
     }
 
-    public ArrayList<Tasks> loadTasks() {
+    public TaskList loadTasks() {
         ArrayList<Tasks> task = new ArrayList<>();
         try (Scanner scanner = new Scanner(DATA_FILE_PATH.toFile())) {
             while (scanner.hasNext()) {
@@ -42,12 +43,12 @@ public class TaskStorage {
         } catch (IOException e) {
             System.out.println("Unable to load tasks from storage.");
         }
-        return task;
+        return new TaskList(task);
     }
 
-    public void saveTasks(ArrayList<Tasks> task) {
+    public void saveTasks(TaskList taskList) {
         try (FileWriter fileWriter = new FileWriter(DATA_FILE_PATH.toFile())) {
-            for (Tasks currentTask : task) {
+            for (Tasks currentTask : taskList.list()) {
                 fileWriter.write(formatTask(currentTask) + System.lineSeparator());
             }
         } catch (IOException e) {

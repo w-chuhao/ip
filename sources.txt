@@ -1,6 +1,7 @@
 C:\Users\86159\Documents\NUS\Y2S2\CS2113\ip\src\main\java\chu\errorHandler\ChuExceptions.java
 C:\Users\86159\Documents\NUS\Y2S2\CS2113\ip\src\main\java\chu\errorHandler\ErrorHandler.java
 C:\Users\86159\Documents\NUS\Y2S2\CS2113\ip\src\main\java\chu\storage\TaskStorage.java
+C:\Users\86159\Documents\NUS\Y2S2\CS2113\ip\src\main\java\chu\tasklist\TaskList.java
 C:\Users\86159\Documents\NUS\Y2S2\CS2113\ip\src\main\java\chu\tasks\Deadlines.java
 C:\Users\86159\Documents\NUS\Y2S2\CS2113\ip\src\main\java\chu\tasks\Events.java
 C:\Users\86159\Documents\NUS\Y2S2\CS2113\ip\src\main\java\chu\tasks\Tasks.java

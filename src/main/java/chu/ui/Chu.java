@@ -3,12 +3,12 @@ package chu.ui;
 import chu.errorHandler.ChuExceptions;
 import chu.errorHandler.ErrorHandler;
 import chu.storage.TaskStorage;
+import chu.tasklist.TaskList;
 import chu.tasks.Deadlines;
 import chu.tasks.Events;
 import chu.tasks.Tasks;
 import chu.tasks.ToDos;
 
-import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Chu {
@@ -26,15 +26,13 @@ public class Chu {
         Scanner in = new Scanner(System.in);
 
         TaskStorage storage = new TaskStorage();
-        ArrayList<Tasks> tasks = new ArrayList<>();
+        TaskList taskList = new TaskList();
         try {
             storage.initStorage();
-            tasks = storage.loadTasks();
+            taskList = storage.loadTasks();
         } catch (Exception e) {
             System.out.println("Unable to initialize storage.");
         }
-
-        int index = 0;
 
         while (true) {
             try {
@@ -52,61 +50,62 @@ public class Chu {
 
                 case "list":
                     System.out.println("Here are the tasks in your list:");
-                    for (int i = 0; i < tasks.size(); i++) {
-                        System.out.println((i + 1) + "." + tasks.get(i));
-                    }
+                    taskList.printList();
                     break;
 
                 case "delete":
-                    index = ErrorHandler.handleIndex(sentence, tasks.size());
+                    int deleteIndex = ErrorHandler.handleIndex(sentence, taskList.size());
+                    Tasks deletedTask = taskList.delete(deleteIndex);
                     System.out.println("Noted, I've removed this tasks:");
-                    System.out.println(tasks.get(index));
-                    tasks.remove(index);
-                    storage.saveTasks(tasks);
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    System.out.println(deletedTask);
+                    storage.saveTasks(taskList);
+                    System.out.println("Now you have " + taskList.size() + " tasks in the list.");
                     break;
 
                 case "mark":
-                    index = ErrorHandler.handleIndex(sentence, tasks.size());
-                    tasks.get(index).markAsDone();
-                    storage.saveTasks(tasks);
+                    int markIndex = ErrorHandler.handleIndex(sentence, taskList.size());
+                    Tasks markedTask = taskList.mark(markIndex);
+                    storage.saveTasks(taskList);
                     System.out.println("Nice! I've marked this tasks as done:");
-                    System.out.println(tasks.get(index));
+                    System.out.println(markedTask);
                     break;
 
                 case "unmark":
-                    index = ErrorHandler.handleIndex(sentence, tasks.size());
-                    tasks.get(index).unmark();
-                    storage.saveTasks(tasks);
+                    int unmarkIndex = ErrorHandler.handleIndex(sentence, taskList.size());
+                    Tasks unmarkedTask = taskList.unmark(unmarkIndex);
+                    storage.saveTasks(taskList);
                     System.out.println("OK, I've marked this tasks as not done yet:");
-                    System.out.println(tasks.get(index));
+                    System.out.println(unmarkedTask);
                     break;
 
                 case "todo":
                     String toDo = ErrorHandler.handleToDos(line);
-                    tasks.add(new ToDos(toDo));
-                    storage.saveTasks(tasks);
+                    Tasks todoTask = new ToDos(toDo);
+                    taskList.add(todoTask);
+                    storage.saveTasks(taskList);
                     System.out.println("Got it. I've added this tasks:");
-                    System.out.println(tasks.get(tasks.size() - 1));
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    System.out.println(todoTask);
+                    System.out.println("Now you have " + taskList.size() + " tasks in the list.");
                     break;
 
                 case "deadline":
                     String[] deadline = ErrorHandler.handleDeadlines(line);
-                    tasks.add(new Deadlines(deadline[0], deadline[1]));
-                    storage.saveTasks(tasks);
+                    Tasks deadlineTask = new Deadlines(deadline[0], deadline[1]);
+                    taskList.add(deadlineTask);
+                    storage.saveTasks(taskList);
                     System.out.println("Got it. I've added this tasks:");
-                    System.out.println(tasks.get(tasks.size() - 1));
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    System.out.println(deadlineTask);
+                    System.out.println("Now you have " + taskList.size() + " tasks in the list.");
                     break;
 
                 case "event":
                     String[] event = ErrorHandler.handleEvents(line);
-                    tasks.add(new Events(event[0], event[1], event[2]));
-                    storage.saveTasks(tasks);
+                    Tasks eventTask = new Events(event[0], event[1], event[2]);
+                    taskList.add(eventTask);
+                    storage.saveTasks(taskList);
                     System.out.println("Got it. I've added this tasks:");
-                    System.out.println(tasks.get(tasks.size() - 1));
-                    System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                    System.out.println(eventTask);
+                    System.out.println("Now you have " + taskList.size() + " tasks in the list.");
                     break;
 
 
