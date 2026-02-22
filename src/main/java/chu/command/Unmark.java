@@ -6,20 +6,19 @@ import chu.storage.TaskStorage;
 import chu.tasklist.TaskList;
 import chu.tasks.Tasks;
 
-public class delete implements command {
+public class Unmark implements command {
     private final String[] sentence;
 
-    public delete(String[] sentence) {
+    public Unmark(String[] sentence) {
         this.sentence = sentence;
     }
 
     @Override
     public void execute(TaskList taskList, TaskStorage storage) throws ChuExceptions {
-        int deleteIndex = ErrorHandler.handleIndex(sentence, taskList.size());
-        Tasks deletedTask = taskList.delete(deleteIndex);
-        System.out.println("Noted, I've removed this tasks:");
-        System.out.println(deletedTask);
+        int unmarkIndex = ErrorHandler.handleIndex(sentence, taskList.size());
+        Tasks unmarkedTask = taskList.unmark(unmarkIndex);
         storage.saveTasks(taskList);
-        System.out.println("Now you have " + taskList.size() + " tasks in the list.");
+        System.out.println("OK, I've marked this tasks as not done yet:");
+        System.out.println(unmarkedTask);
     }
 }

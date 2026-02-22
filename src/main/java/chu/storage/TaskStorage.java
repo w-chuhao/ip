@@ -8,6 +8,8 @@ import chu.tasks.ToDos;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,6 +18,7 @@ import java.util.Scanner;
 
 public class TaskStorage {
     private static final Path DATA_FILE_PATH = Paths.get("data", "chu.txt");
+    private static final DateTimeFormatter STORAGE_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
     public void initStorage() {
         try {
@@ -68,10 +71,10 @@ public class TaskStorage {
             task = new ToDos(description);
             break;
         case "D":
-            task = new Deadlines(description, parts[3]);
+            task = new Deadlines(description, parseStoredDateTime(parts[3]));
             break;
         case "E":
-            task = new Events(description, parts[3], parts[4]);
+            task = new Events(description, parseStoredDateTime(parts[3]), parseStoredDateTime(parts[4]));
             break;
         default:
             task = new ToDos(description);
@@ -91,13 +94,19 @@ public class TaskStorage {
         }
         if (task instanceof Deadlines) {
             Deadlines deadline = (Deadlines) task;
-            return "D | " + status + " | " + task.getDescription() + " | " + deadline.getBy();
+            return "D | " + status + " | " + task.getDescription()
+                    + " | " + deadline.getBy().format(STORAGE_DATE_TIME_FORMAT);
         }
         if (task instanceof Events) {
             Events event = (Events) task;
             return "E | " + status + " | " + task.getDescription()
-                    + " | " + event.getStart() + " | " + event.getEnd();
+                    + " | " + event.getStart().format(STORAGE_DATE_TIME_FORMAT)
+                    + " | " + event.getEnd().format(STORAGE_DATE_TIME_FORMAT);
         }
         return "T | " + status + " | " + task.getDescription();
+    }
+
+    private LocalDateTime parseStoredDateTime(String raw) {
+        return LocalDateTime.parse(raw, STORAGE_DATE_TIME_FORMAT);
     }
 }

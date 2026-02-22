@@ -1,19 +1,24 @@
 package chu.tasks;
 
-public class Deadlines extends Tasks {
-    protected String by;
+import chu.parser.DateTimeParser;
 
-    public Deadlines(String description, String by) {
+import java.time.LocalDateTime;
+
+public class Deadlines extends Tasks {
+    protected LocalDateTime by;
+    private DateTimeParser dateTimeParser = new DateTimeParser();
+
+    public Deadlines(String description, LocalDateTime by) {
         super(description);
         this.by = by;
     }
 
-    public String getBy() {
+    public LocalDateTime getBy() {
         return by;
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by + ")";
+        return "[D]" + super.toString() + " (by: " + dateTimeParser.format(by) + ")";
     }
 }

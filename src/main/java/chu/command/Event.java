@@ -2,22 +2,28 @@ package chu.command;
 
 import chu.errorHandler.ChuExceptions;
 import chu.errorHandler.ErrorHandler;
+import chu.parser.DateTimeParser;
 import chu.storage.TaskStorage;
 import chu.tasklist.TaskList;
 import chu.tasks.Events;
 import chu.tasks.Tasks;
 
-public class event implements command {
-    private final String line;
+import java.time.LocalDateTime;
 
-    public event(String line) {
+public class Event implements command {
+    private final String line;
+    private DateTimeParser dateTimeParser = new DateTimeParser();
+
+    public Event(String line) {
         this.line = line;
     }
 
     @Override
     public void execute(TaskList taskList, TaskStorage storage) throws ChuExceptions {
         String[] event = ErrorHandler.handleEvents(line);
-        Tasks eventTask = new Events(event[0], event[1], event[2]);
+        LocalDateTime from = dateTimeParser.parseInput(event[1]);
+        LocalDateTime to = dateTimeParser.parseInput(event[2]);
+        Tasks eventTask = new Events(event[0], from, to);
         taskList.add(eventTask);
         storage.saveTasks(taskList);
         System.out.println("Got it. I've added this tasks:");
