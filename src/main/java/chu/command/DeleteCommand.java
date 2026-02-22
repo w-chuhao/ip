@@ -6,10 +6,10 @@ import chu.storage.TaskStorage;
 import chu.tasklist.TaskList;
 import chu.tasks.Tasks;
 
-public class Delete implements command {
+public class DeleteCommand implements Command {
     private final String[] sentence;
 
-    public Delete(String[] sentence) {
+    public DeleteCommand(String[] sentence) {
         this.sentence = sentence;
     }
 

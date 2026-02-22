@@ -7,10 +7,10 @@ import chu.tasklist.TaskList;
 import chu.tasks.Tasks;
 import chu.tasks.ToDos;
 
-public class ToDo implements command {
+public class ToDoCommand implements Command {
     private final String line;
 
-    public ToDo(String line) {
+    public ToDoCommand(String line) {
         this.line = line;
     }
 

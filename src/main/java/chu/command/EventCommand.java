@@ -10,11 +10,11 @@ import chu.tasks.Tasks;
 
 import java.time.LocalDateTime;
 
-public class Event implements command {
+public class EventCommand implements Command {
     private final String line;
     private DateTimeParser dateTimeParser = new DateTimeParser();
 
-    public Event(String line) {
+    public EventCommand(String line) {
         this.line = line;
     }
 

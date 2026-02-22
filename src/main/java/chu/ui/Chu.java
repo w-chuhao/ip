@@ -1,6 +1,6 @@
 package chu.ui;
 
-import chu.command.command;
+import chu.command.Command;
 import chu.errorHandler.ChuExceptions;
 import chu.parser.Parser;
 import chu.storage.TaskStorage;
@@ -32,7 +32,7 @@ public class Chu {
         while (true) {
             try {
                 String line = ui.readLine();
-                command userCommand = parser.parse(line);
+                Command userCommand = parser.parse(line);
                 userCommand.execute(taskList, storage);
                 if (userCommand.isExit()) {
                     return;
