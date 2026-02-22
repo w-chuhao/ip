@@ -3,14 +3,31 @@ import chu.tasklist.TaskList;
 import chu.tasks.Tasks;
 import java.util.ArrayList;
 
+/**
+ * Performs validation and parsing checks for user input.
+ */
 public class ErrorHandler {
 
+    /**
+     * Validates that the input line is not empty.
+     *
+     * @param line Input line to validate.
+     * @throws ChuExceptions If the line is empty.
+     */
     public static void handleEmpty(String line) throws ChuExceptions {
         if (line.trim().isEmpty()) {
             throw new ChuExceptions("Please enter a command.");
         }
     }
 
+    /**
+     * Finds tasks whose descriptions contain the keyword.
+     *
+     * @param word Keyword to search for.
+     * @param taskList Task list to search in.
+     * @return Matching tasks.
+     * @throws ChuExceptions If the keyword is empty or no task is found.
+     */
     public static ArrayList<Tasks> handleFind(String word, TaskList taskList) throws ChuExceptions {
         if (word == null || word.trim().isEmpty()) {
             throw new ChuExceptions("The keyword for find cannot be empty.");
@@ -30,6 +47,14 @@ public class ErrorHandler {
         return result;
     }
 
+    /**
+     * Parses and validates a user-provided task index.
+     *
+     * @param sentence Tokenized user command.
+     * @param counter Total number of tasks.
+     * @return Zero-based validated task index.
+     * @throws ChuExceptions If index is missing, not numeric, or out of range.
+     */
     public static int handleIndex(String[] sentence, int counter) throws ChuExceptions {
         if (sentence.length < 2) {
             throw new ChuExceptions("Please provide an index, e.g. `mark 2`, `unmark 2`.");
@@ -46,6 +71,13 @@ public class ErrorHandler {
         return index;
     }
 
+    /**
+     * Extracts a to-do description from the command line.
+     *
+     * @param line Raw to-do command line.
+     * @return Trimmed to-do description.
+     * @throws ChuExceptions If the description is empty.
+     */
     public static String handleToDos(String line) throws ChuExceptions {
         if (line.length() <= 4 || line.substring(4).trim().isEmpty()) {
             throw new ChuExceptions("The description of a todo cannot be empty.");
@@ -53,6 +85,13 @@ public class ErrorHandler {
         return line.substring(5).trim();
     }
 
+    /**
+     * Extracts deadline description and due time from the command line.
+     *
+     * @param line Raw deadline command line.
+     * @return Array containing description and due time text.
+     * @throws ChuExceptions If command parts are missing or empty.
+     */
     public static String[] handleDeadlines(String line) throws ChuExceptions {
         int byIndex = line.indexOf("/by");
         if (byIndex == -1) {
@@ -69,6 +108,13 @@ public class ErrorHandler {
         return new String[] { description, by };
     }
 
+    /**
+     * Extracts event description, start time and end time from the command.
+     *
+     * @param line Raw event command line.
+     * @return Array containing description, start and end time text.
+     * @throws ChuExceptions If command format is invalid or values are empty.
+     */
     public static String[] handleEvents(String line) throws ChuExceptions {
         int fromIndex = line.indexOf("/from");
         int toIndex = line.indexOf("/to");

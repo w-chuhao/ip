@@ -16,10 +16,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Handles persistence of tasks to and from local storage.
+ */
 public class TaskStorage {
     private static final Path DATA_FILE_PATH = Paths.get("data", "chu.txt");
     private static final DateTimeFormatter STORAGE_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
+    /**
+     * Creates storage directory and file if missing.
+     */
     public void initStorage() {
         try {
             Path parentDirectory = DATA_FILE_PATH.getParent();
@@ -34,6 +40,11 @@ public class TaskStorage {
         }
     }
 
+    /**
+     * Loads all persisted tasks from storage.
+     *
+     * @return Task list reconstructed from file content.
+     */
     public TaskList loadTasks() {
         ArrayList<Tasks> task = new ArrayList<>();
         try (Scanner scanner = new Scanner(DATA_FILE_PATH.toFile())) {
@@ -49,6 +60,11 @@ public class TaskStorage {
         return new TaskList(task);
     }
 
+    /**
+     * Saves all tasks to the storage file.
+     *
+     * @param taskList Task list to persist.
+     */
     public void saveTasks(TaskList taskList) {
         try (FileWriter fileWriter = new FileWriter(DATA_FILE_PATH.toFile())) {
             for (Tasks currentTask : taskList.list()) {

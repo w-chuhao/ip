@@ -13,7 +13,17 @@ import chu.command.UnmarkCommand;
 import chu.errorHandler.ChuExceptions;
 import chu.errorHandler.ErrorHandler;
 
+/**
+ * Parses raw user input into executable command objects.
+ */
 public class Parser {
+    /**
+     * Parses the given input string into a command.
+     *
+     * @param input Raw user input line.
+     * @return A command that matches the user input.
+     * @throws ChuExceptions If the input is empty or the command is invalid.
+     */
     public Command parse(String input) throws ChuExceptions {
         ErrorHandler.handleEmpty(input);
         String line = input.trim().toLowerCase();

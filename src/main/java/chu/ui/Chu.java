@@ -6,7 +6,15 @@ import chu.parser.Parser;
 import chu.storage.TaskStorage;
 import chu.tasklist.TaskList;
 
+/**
+ * Entry point for the Chu task manager application.
+ */
 public class Chu {
+    /**
+     * Starts the application loop and handles user commands.
+     *
+     * @param args Command-line arguments.
+     */
     public static void main(String[] args) {
         String logo =
                 "  _____ _    _ _   _ \n"

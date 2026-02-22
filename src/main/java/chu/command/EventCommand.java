@@ -10,14 +10,29 @@ import chu.tasks.Tasks;
 
 import java.time.LocalDateTime;
 
+/**
+ * Command that creates a new event task.
+ */
 public class EventCommand implements Command {
     private final String line;
     private DateTimeParser dateTimeParser = new DateTimeParser();
 
+    /**
+     * Creates an event command.
+     *
+     * @param line Raw user input.
+     */
     public EventCommand(String line) {
         this.line = line;
     }
 
+    /**
+     * Adds an event task and persists changes.
+     *
+     * @param taskList In-memory task list.
+     * @param storage Storage handler for persistence.
+     * @throws ChuExceptions If command or date-time input is invalid.
+     */
     @Override
     public void execute(TaskList taskList, TaskStorage storage) throws ChuExceptions {
         String[] event = ErrorHandler.handleEvents(line);
