@@ -1,25 +1,32 @@
 package chu.tasks;
 
-public class Events extends Tasks {
-    protected String start;
-    protected String end;
+import chu.parser.DateTimeParser;
 
-    public Events(String description, String start, String end) {
+import java.time.LocalDateTime;
+
+public class Events extends Tasks {
+    protected LocalDateTime start;
+    protected LocalDateTime end;
+    private DateTimeParser dateTimeParser = new DateTimeParser();
+
+    public Events(String description, LocalDateTime start, LocalDateTime end) {
         super(description);
         this.start = start;
         this.end = end;
     }
 
-    public String getStart() {
+    public LocalDateTime getStart() {
         return start;
     }
 
-    public String getEnd() {
+    public LocalDateTime getEnd() {
         return end;
     }
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " (from: " + start + " to: " + end + ")";
+        return "[E]" + super.toString()
+                + " (from: " + dateTimeParser.format(start)
+                + " to: " + dateTimeParser.format(end) + ")";
     }
 }

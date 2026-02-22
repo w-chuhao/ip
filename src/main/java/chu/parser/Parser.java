@@ -1,14 +1,14 @@
 package chu.parser;
 
-import chu.command.bye;
+import chu.command.Bye;
 import chu.command.command;
-import chu.command.deadline;
-import chu.command.delete;
-import chu.command.event;
-import chu.command.list;
-import chu.command.mark;
-import chu.command.todo;
-import chu.command.unmark;
+import chu.command.Deadline;
+import chu.command.Delete;
+import chu.command.Event;
+import chu.command.List;
+import chu.command.Mark;
+import chu.command.ToDo;
+import chu.command.Unmark;
 import chu.errorHandler.ChuExceptions;
 import chu.errorHandler.ErrorHandler;
 
@@ -21,21 +21,21 @@ public class Parser {
 
         switch (command) {
         case "bye":
-            return new bye();
+            return new Bye();
         case "list":
-            return new list();
+            return new List();
         case "todo":
-            return new todo(line);
+            return new ToDo(line);
         case "deadline":
-            return new deadline(line);
+            return new Deadline(line);
         case "event":
-            return new event(line);
+            return new Event(line);
         case "delete":
-            return new delete(sentence);
+            return new Delete(sentence);
         case "mark":
-            return new mark(sentence);
+            return new Mark(sentence);
         case "unmark":
-            return new unmark(sentence);
+            return new Unmark(sentence);
         default:
             throw new ChuExceptions("Invalid command. Valid commands: bye, list, todo, deadline, event, mark, unmark.");
         }
