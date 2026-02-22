@@ -1,6 +1,6 @@
 # Chu User Guide
 
-![Screenshot](screenshot.png)
+![Screenshot](Screenshot.png)
 
 Chu is a CLI task manager that helps you keep track of to-dos, deadlines, and events.
 All interactions are done through text commands.
