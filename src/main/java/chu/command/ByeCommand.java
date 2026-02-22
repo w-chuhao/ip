@@ -3,7 +3,7 @@ package chu.command;
 import chu.storage.TaskStorage;
 import chu.tasklist.TaskList;
 
-public class Bye implements command {
+public class ByeCommand implements Command {
     @Override
     public void execute(TaskList taskList, TaskStorage storage) {
         System.out.println("Bye. Hope to see you again soon!");

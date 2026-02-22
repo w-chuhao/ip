@@ -48,4 +48,9 @@ public class TaskList {
             System.out.println((i + 1) + "." + tasks.get(i));
         }
     }
+
+    public Tasks getTask(int index){
+        return tasks.get(index);
+    }
+
 }

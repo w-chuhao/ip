@@ -10,11 +10,11 @@ import chu.tasks.Tasks;
 
 import java.time.LocalDateTime;
 
-public class Deadline implements command {
+public class DeadlineCommand implements Command {
     private final String line;
     private DateTimeParser dateTimeParser = new DateTimeParser();
 
-    public Deadline(String line) {
+    public DeadlineCommand(String line) {
         this.line = line;
     }
 

@@ -1,4 +1,7 @@
 package chu.errorHandler;
+import chu.tasklist.TaskList;
+import chu.tasks.Tasks;
+import java.util.ArrayList;
 
 public class ErrorHandler {
 
@@ -6,6 +9,25 @@ public class ErrorHandler {
         if (line.trim().isEmpty()) {
             throw new ChuExceptions("Please enter a command.");
         }
+    }
+
+    public static ArrayList<Tasks> handleFind(String word, TaskList taskList) throws ChuExceptions {
+        if (word == null || word.trim().isEmpty()) {
+            throw new ChuExceptions("The keyword for find cannot be empty.");
+        }
+        word = word.toLowerCase();
+        ArrayList<Tasks> result = new ArrayList<>();
+        for (int i = 0; i < taskList.size(); i += 1) {
+            Tasks current = taskList.getTask(i);
+            String description = current.getDescription().toLowerCase();
+            if (description.contains(word)) {
+                result.add(current);
+            }
+        }
+        if (result.isEmpty()) {
+            throw new ChuExceptions("Task not found");
+        }
+        return result;
     }
 
     public static int handleIndex(String[] sentence, int counter) throws ChuExceptions {
