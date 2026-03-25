@@ -10,21 +10,11 @@ import chu.command.ListCommand;
 import chu.command.MarkCommand;
 import chu.command.ToDoCommand;
 import chu.command.UnmarkCommand;
-import chu.errorHandler.ChuExceptions;
-import chu.errorHandler.ErrorHandler;
+import chu.errorhandler.ChuException;
+import chu.errorhandler.ErrorHandler;
 
-/**
- * Parses raw user input into executable command objects.
- */
 public class Parser {
-    /**
-     * Parses the given input string into a command.
-     *
-     * @param input Raw user input line.
-     * @return A command that matches the user input.
-     * @throws ChuExceptions If the input is empty or the command is invalid.
-     */
-    public Command parse(String input) throws ChuExceptions {
+    public Command parse(String input) throws ChuException {
         ErrorHandler.handleEmpty(input);
         String line = input.trim().toLowerCase();
         String[] sentence = line.split(" ");
@@ -50,7 +40,9 @@ public class Parser {
         case "find":
             return new FindCommand(line);
         default:
-            throw new ChuExceptions("Invalid command. Valid commands: bye, list, todo, deadline, event, delete, mark, unmark, find.");
+            throw new ChuException(
+                    "Invalid command. Valid commands: bye, list, todo, deadline, event, delete, mark, unmark, find."
+            );
         }
     }
 }

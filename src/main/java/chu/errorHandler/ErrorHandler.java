@@ -1,136 +1,90 @@
-package chu.errorHandler;
+package chu.errorhandler;
+
 import chu.tasklist.TaskList;
-import chu.tasks.Tasks;
+import chu.tasks.Task;
+
 import java.util.ArrayList;
 
-/**
- * Performs validation and parsing checks for user input.
- */
 public class ErrorHandler {
-
-    /**
-     * Validates that the input line is not empty.
-     *
-     * @param line Input line to validate.
-     * @throws ChuExceptions If the line is empty.
-     */
-    public static void handleEmpty(String line) throws ChuExceptions {
+    public static void handleEmpty(String line) throws ChuException {
         if (line.trim().isEmpty()) {
-            throw new ChuExceptions("Please enter a command.");
+            throw new ChuException("Please enter a command.");
         }
     }
 
-    /**
-     * Finds tasks whose descriptions contain the keyword.
-     *
-     * @param word Keyword to search for.
-     * @param taskList Task list to search in.
-     * @return Matching tasks.
-     * @throws ChuExceptions If the keyword is empty or no task is found.
-     */
-    public static ArrayList<Tasks> handleFind(String word, TaskList taskList) throws ChuExceptions {
+    public static ArrayList<Task> handleFind(String word, TaskList taskList) throws ChuException {
         if (word == null || word.trim().isEmpty()) {
-            throw new ChuExceptions("The keyword for find cannot be empty.");
+            throw new ChuException("The keyword for find cannot be empty.");
         }
         word = word.toLowerCase();
-        ArrayList<Tasks> result = new ArrayList<>();
+        ArrayList<Task> result = new ArrayList<>();
         for (int i = 0; i < taskList.size(); i += 1) {
-            Tasks current = taskList.getTask(i);
+            Task current = taskList.getTask(i);
             String description = current.getDescription().toLowerCase();
             if (description.contains(word)) {
                 result.add(current);
             }
         }
         if (result.isEmpty()) {
-            throw new ChuExceptions("Task not found");
+            throw new ChuException("Task not found");
         }
         return result;
     }
 
-    /**
-     * Parses and validates a user-provided task index.
-     *
-     * @param sentence Tokenized user command.
-     * @param counter Total number of tasks.
-     * @return Zero-based validated task index.
-     * @throws ChuExceptions If index is missing, not numeric, or out of range.
-     */
-    public static int handleIndex(String[] sentence, int counter) throws ChuExceptions {
+    public static int handleIndex(String[] sentence, int counter) throws ChuException {
         if (sentence.length < 2) {
-            throw new ChuExceptions("Please provide an index, e.g. `mark 2`, `unmark 2`.");
+            throw new ChuException("Please provide an index, e.g. `mark 2`, `unmark 2`.");
         }
         int index;
         try {
             index = Integer.parseInt(sentence[1]) - 1;
         } catch (NumberFormatException e) {
-            throw new ChuExceptions("Index must be a number.");
+            throw new ChuException("Index must be a number.");
         }
         if (index < 0 || index >= counter) {
-            throw new ChuExceptions("Index out of range.");
+            throw new ChuException("Index out of range.");
         }
         return index;
     }
 
-    /**
-     * Extracts a to-do description from the command line.
-     *
-     * @param line Raw to-do command line.
-     * @return Trimmed to-do description.
-     * @throws ChuExceptions If the description is empty.
-     */
-    public static String handleToDos(String line) throws ChuExceptions {
+    public static String handleTodos(String line) throws ChuException {
         if (line.length() <= 4 || line.substring(4).trim().isEmpty()) {
-            throw new ChuExceptions("The description of a todo cannot be empty.");
+            throw new ChuException("The description of a todo cannot be empty.");
         }
         return line.substring(5).trim();
     }
 
-    /**
-     * Extracts deadline description and due time from the command line.
-     *
-     * @param line Raw deadline command line.
-     * @return Array containing description and due time text.
-     * @throws ChuExceptions If command parts are missing or empty.
-     */
-    public static String[] handleDeadlines(String line) throws ChuExceptions {
+    public static String[] handleDeadlines(String line) throws ChuException {
         int byIndex = line.indexOf("/by");
         if (byIndex == -1) {
-            throw new ChuExceptions("Deadline needs a /by, e.g. `deadline read /by Monday`.");
+            throw new ChuException("Deadline needs a /by, e.g. `deadline read /by Monday`.");
         }
         String description = line.substring(9, byIndex).trim();
         String by = line.substring(byIndex + 3).trim();
         if (description.isEmpty()) {
-            throw new ChuExceptions("The description of a deadline cannot be empty.");
+            throw new ChuException("The description of a deadline cannot be empty.");
         }
         if (by.isEmpty()) {
-            throw new ChuExceptions("The /by value cannot be empty.");
+            throw new ChuException("The /by value cannot be empty.");
         }
         return new String[] { description, by };
     }
 
-    /**
-     * Extracts event description, start time and end time from the command.
-     *
-     * @param line Raw event command line.
-     * @return Array containing description, start and end time text.
-     * @throws ChuExceptions If command format is invalid or values are empty.
-     */
-    public static String[] handleEvents(String line) throws ChuExceptions {
+    public static String[] handleEvents(String line) throws ChuException {
         int fromIndex = line.indexOf("/from");
         int toIndex = line.indexOf("/to");
         if (fromIndex == -1 || toIndex == -1 || toIndex < fromIndex) {
-            throw new ChuExceptions("Event needs /from and /to, e.g. `event meet /from 2pm /to 3pm`.");
+            throw new ChuException("Event needs /from and /to, e.g. `event meet /from 2pm /to 3pm`.");
         }
         String description = line.substring(6, fromIndex).trim();
         String from = line.substring(fromIndex + 5, toIndex).trim();
         String to = line.substring(toIndex + 3).trim();
         if (description.isEmpty()) {
-            throw new ChuExceptions("The description of an event cannot be empty.");
+            throw new ChuException("The description of an event cannot be empty.");
         }
         if (from.isEmpty() || to.isEmpty()) {
-            throw new ChuExceptions("The /from and /to values cannot be empty.");
+            throw new ChuException("The /from and /to values cannot be empty.");
         }
         return new String[] { description, from, to };
     }
-
 }

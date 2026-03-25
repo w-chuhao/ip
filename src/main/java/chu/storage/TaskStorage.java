@@ -1,31 +1,26 @@
 package chu.storage;
 
 import chu.tasklist.TaskList;
-import chu.tasks.Deadlines;
-import chu.tasks.Events;
-import chu.tasks.Tasks;
-import chu.tasks.ToDos;
+import chu.tasks.Deadline;
+import chu.tasks.Event;
+import chu.tasks.Task;
+import chu.tasks.Todo;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Handles persistence of tasks to and from local storage.
- */
 public class TaskStorage {
     private static final Path DATA_FILE_PATH = Paths.get("data", "chu.txt");
-    private static final DateTimeFormatter STORAGE_DATE_TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter STORAGE_DATE_TIME_FORMAT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 
-    /**
-     * Creates storage directory and file if missing.
-     */
     public void initStorage() {
         try {
             Path parentDirectory = DATA_FILE_PATH.getParent();
@@ -40,13 +35,8 @@ public class TaskStorage {
         }
     }
 
-    /**
-     * Loads all persisted tasks from storage.
-     *
-     * @return Task list reconstructed from file content.
-     */
     public TaskList loadTasks() {
-        ArrayList<Tasks> task = new ArrayList<>();
+        ArrayList<Task> task = new ArrayList<>();
         try (Scanner scanner = new Scanner(DATA_FILE_PATH.toFile())) {
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
@@ -60,14 +50,9 @@ public class TaskStorage {
         return new TaskList(task);
     }
 
-    /**
-     * Saves all tasks to the storage file.
-     *
-     * @param taskList Task list to persist.
-     */
     public void saveTasks(TaskList taskList) {
         try (FileWriter fileWriter = new FileWriter(DATA_FILE_PATH.toFile())) {
-            for (Tasks currentTask : taskList.list()) {
+            for (Task currentTask : taskList.list()) {
                 fileWriter.write(formatTask(currentTask) + System.lineSeparator());
             }
         } catch (IOException e) {
@@ -75,25 +60,25 @@ public class TaskStorage {
         }
     }
 
-    private Tasks parseLine(String line) {
+    private Task parseLine(String line) {
         String[] parts = line.split(" \\| ");
         String type = parts[0];
         String status = parts[1];
         String description = parts[2];
-        Tasks task;
+        Task task;
 
         switch (type) {
         case "T":
-            task = new ToDos(description);
+            task = new Todo(description);
             break;
         case "D":
-            task = new Deadlines(description, parseStoredDateTime(parts[3]));
+            task = new Deadline(description, parseStoredDateTime(parts[3]));
             break;
         case "E":
-            task = new Events(description, parseStoredDateTime(parts[3]), parseStoredDateTime(parts[4]));
+            task = new Event(description, parseStoredDateTime(parts[3]), parseStoredDateTime(parts[4]));
             break;
         default:
-            task = new ToDos(description);
+            task = new Todo(description);
         }
 
         if ("1".equals(status)) {
@@ -102,19 +87,19 @@ public class TaskStorage {
         return task;
     }
 
-    private String formatTask(Tasks task) {
+    private String formatTask(Task task) {
         String status = "X".equals(task.getStatusIcon()) ? "1" : "0";
 
-        if (task instanceof ToDos) {
+        if (task instanceof Todo) {
             return "T | " + status + " | " + task.getDescription();
         }
-        if (task instanceof Deadlines) {
-            Deadlines deadline = (Deadlines) task;
+        if (task instanceof Deadline) {
+            Deadline deadline = (Deadline) task;
             return "D | " + status + " | " + task.getDescription()
                     + " | " + deadline.getBy().format(STORAGE_DATE_TIME_FORMAT);
         }
-        if (task instanceof Events) {
-            Events event = (Events) task;
+        if (task instanceof Event) {
+            Event event = (Event) task;
             return "E | " + status + " | " + task.getDescription()
                     + " | " + event.getStart().format(STORAGE_DATE_TIME_FORMAT)
                     + " | " + event.getEnd().format(STORAGE_DATE_TIME_FORMAT);
